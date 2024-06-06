@@ -18,3 +18,8 @@ SELECT
     paidamount
 FROM
     src_user_event
+WHERE
+    datestamp is NOT NULL
+{% if is_incremental() %}
+    AND datestamp > (SELECT max(datestamp) from {{ this }})
+{% endif %}
