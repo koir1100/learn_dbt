@@ -1,6 +1,6 @@
 WITH src_user_metadata AS
 (
-    SELECT * FROM raw_data.user_metadata
+    SELECT * FROM {{ source("yonggu_choi", "metadata") }}
 )
 SELECT
     user_id,

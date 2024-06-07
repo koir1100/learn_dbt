@@ -1,6 +1,6 @@
 WITH src_user_event AS
 (
-    SELECT * FROM raw_data.user_event
+    SELECT * FROM {{ source("yonggu_choi", "event") }}
 )
 SELECT
     user_id,
