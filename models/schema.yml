@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: dim_user_metadata
+    description: A dimension table with user metadata
     columns:
     - name: user_id
+      description: The primary key of the table
       tests:
       - unique
       - not_null

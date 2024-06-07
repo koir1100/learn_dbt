@@ -2,15 +2,19 @@ version: 2
 
 sources:
   - name: yonggu_choi
+    description: raw_data schema alias
     schema: raw_data
     tables:
       - name: metadata
+        description: user_metadata schema alias
         identifier: user_metadata
       - name: event
+        description: user_event schema alias
         identifier: user_event
         loaded_at_field: datestamp
         freshness:
           warn_after: { count: 1, period: hour }
           error_after: { count: 24, period: hour }
       - name: variant
+        description: user_variant schema alias
         identifier: user_variant
