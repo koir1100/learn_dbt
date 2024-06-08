@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>DBT</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h2 id="dbt">DBT</h2>
+<h3 id="개념-요약">개념 요약</h3>
+<ol>
+<li>dbt (Data Build Tool)</li>
+</ol>
+<ul>
+<li>ELT를 보다 용이하게 사용할 수 있도록 만든 오픈 소스로, 다양한 데이터 웨어하우스를 지원함
+<ul>
+<li>BigQuery, Redshift, Snowflake, Spark(Hive 연동)</li>
+</ul>
+</li>
+<li>구성 요소로 models, tests, snapshots로 구성됨</li>
+</ul>
+<ol start="2">
+<li>dbt Seeds</li>
+</ol>
+<ul>
+<li>dimension 테이블은 규모가 작고, 데이터가 많이 변하지 않으므로, 작은 csv 파일 자체를 D/W로 로드하는 방법</li>
+<li>프로젝트 디렉터리 내 seeds 폴더 내 csv 파일을 넣고 <code>dbt seed</code> 명령어를 통해 실행</li>
+</ul>
+<ol start="3">
+<li>dbt Sources</li>
+</ol>
+<ul>
+<li>처음 입력 테이블에 별칭을 주고, 이 별칭을 staging 테이블에서 사용
+<ul>
+<li>이는 입력 테이블이 계속 바뀌면 sql 파일 내 하나씩 찾아 바꿔줘야 하는 번거로움을 해소하고자 나타난 것임</li>
+</ul>
+</li>
+<li>프로젝트 디렉터리에서 models 디렉터리 내 sources.yml 파일을 생성하고, 파일 내용을 기반으로 sql 내용을 jinja 템플릿을 활용 변경
+<ul>
+<li><code>{{ source(&quot;yonggu_choi&quot;, &quot;event&quot;) }}</code></li>
+</ul>
+</li>
+<li>추가로, 데이터의 Freshness 를 확인 가능 (sources.yml 파일 내 다음 내용 추가, <code>dbt source fressness</code> 명령 수행)<pre><code>  loaded_at_field: datestamp
+  fressness:
+    warn_after: { count: 1, period: hour }
+    error_after: { count: 24, period: hour }
+</code></pre>
+</li>
+</ul>
+<ol start="4">
+<li>dbt Snapshots</li>
+</ol>
+<ul>
+<li>테이블의 변화를 지속적으로 기록 → 해당 시점으로 롤백하여 내용을 볼 수 있는 기능</li>
+<li>snapshots 디렉터리 내 관련 기능을 구현하는 config를 포함한 쿼리 파일이 있어야 함
+<ul>
+<li>또한, 해당 기록을 하기 위한 조건(pk, ts column) 필요</li>
+</ul>
+</li>
+<li>실행은 <code>dbt snapshot</code> 명령을 통해 실행 가능
+<ul>
+<li>유의사항으로 프로젝트 루트 폴더에서 해당 명령을 실행할 것!</li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li>dbt Tests</li>
+</ol>
+<ul>
+<li>데이터 품질을 테스트하는 방법으로, 내장 일반 테스트와 커스텀 테스트 방법이 존재함</li>
+<li>내장 일반 테스트는 프로젝트의 models 디렉터리 내 schema.yml 파일에 정의</li>
+<li>커스텀 테스트는 프로젝트의 test 디렉터리 내 테스트를 위한 쿼리문 작성
+<ul>
+<li>이 테스트 결과 Rows가 나오면 안 됨</li>
+</ul>
+</li>
+<li>테스트는 <code>dbt test</code> 명령을 통해 수행 가능
+<ul>
+<li><a href="https://docs.getdbt.com/reference/commands/test">추가 옵션</a>을 통해 특정 테이블 대상으로 테스트가 가능하며 테스트 간 <a href="https://docs.getdbt.com/reference/commands/debug">디버깅</a>이 가능함</li>
+</ul>
+</li>
+</ul>
+<ol start="6">
+<li>dbt Documentation</li>
+</ol>
+<ul>
+<li>yml 파일 내 문서화에 필요한 내용 작성하거나 별도 markdown 파일을 작성하는 방법을 통해 문서화 가능</li>
+<li>작성 내용 기반 <code>dbt doc generate</code> 명령을 통해 프로젝트의 target 디렉터리 내 catalog.json 파일 생성</li>
+<li>이후, <code>dbt docs serve</code> 명령을 통해 경량 웹서버를 통해 내용 확인 가능 (테이블 계보(lineage)를 시각화해서 보여줌)</li>
+</ul>
+<ol start="7">
+<li>dbt Expectations</li>
+</ol>
+<ul>
+<li>pandas, spark에서 사용 가능한 <a href="https://docs.greatexpectations.io/docs/reference/learn/conceptual_guides/gx_overview">Great Expectations</a>를 dbt에서 사용할 수 있도록 구현한 dbt 확장판임</li>
+<li>dbt 제공 테스트와 같이 사용
+<ul>
+<li>기본 제공 테스트보다 더 많은 함수(약 3~40개)를 제공하여 데이터 유효성 체크가 가능</li>
+</ul>
+</li>
+</ul>
+
+            
+            
+        </body>
+        </html>
